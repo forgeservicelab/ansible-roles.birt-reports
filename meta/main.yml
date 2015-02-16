@@ -1,0 +1,12 @@
+---
+galaxy_info:
+  author: Pasi Kivikangas
+  description: BIRT viewer for FORGE reporting playbook
+  company: Digile Oy
+  license: license (GPLv3)
+  min_ansible_version: 1.8
+  platforms:
+  - name: Ubuntu
+    versions:
+    - trusty
+dependencies: []
