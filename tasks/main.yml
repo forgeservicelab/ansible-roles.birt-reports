@@ -6,7 +6,7 @@
    repo: "{{ reports_repo }}"
    ssh_opts: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
    key_file: "/home/birt/.ssh/{{ git_access_key }}"
-  sudo_user: birt
+  sudo_user: "{{ birt_user }}"
 
 - name: Install report files
   shell: cp -rf {{ reports_tmp }}/* {{ birtviewer_dst }}
