@@ -1,4 +1,4 @@
-reports
+birt-reports
 =========
 
-Role for retrieving FORGE BIRT report files
+Role for retrieving BIRT report files from repository and storing them to the target machine running birt-viewer web app
