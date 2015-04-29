@@ -18,7 +18,7 @@
 # It might be better to copy this manually and comment out this task
 - name: "Setup git_access_key"
   copy:
-    src: "{{ birt_reports.repo_access_key }}"
+    src: "./files/{{ birt_reports.repo_access_key }}"
     dest: "/home/{{ birt_reports.user}}/.ssh/{{ birt_reports.repo_access_key }}"
     mode: 0600
     owner: "{{ birt_reports.user }}"
