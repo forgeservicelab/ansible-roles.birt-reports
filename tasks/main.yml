@@ -1,12 +1,49 @@
 ---
 
+- name: "Install dependencies"
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state=installed update-cache=yes"
+  with_items: 
+      - "{{ reports_deps }}"
+
+- name: "Setup birt user"
+  user: name="{{ birt_reports.user }}"
+
+- name: Setup authorized keys
+  authorized_key: 
+    user: "{{ birt_reports.user }}"
+    key: "{{ lookup('file', './files/%s' % item) }}"
+  with_items: birt_reports.auth_keys
+   
+# Install git_access_key if it exists
+# It might be better to copy this manually and comment out this task
+- name: "Setup git_access_key"
+  copy:
+    src: "{{ birt_reports.repo_access_key }}"
+    dest: "/home/{{ birt_reports.user}}/.ssh/{{ birt_reports.repo_access_key }}"
+    mode: 0600
+    owner: "{{ birt_reports.user }}"
+    group: "{{ birt_reports.user }}"
+
 - name: Fetch report files
   git:
-   dest: "{{ reports_tmp }}"
-   repo: "{{ birt_reports.repo }}"
-   ssh_opts: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
-   key_file: "/home/{{ birt_reports.user }}/.ssh/{{ birt_reports.repo_access_key }}"
-  sudo_user: "{{ birt_reports.user }}"
+    dest: "{{ reports_tmp }}"
+    repo: "{{ birt_reports.repo }}"
+    ssh_opts: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+    key_file: "/home/{{ birt_reports.user }}/.ssh/{{ birt_reports.repo_access_key }}"
+    force: yes
 
 - name: Install report files
-  shell: cp -rf {{ reports_tmp }}/* {{ birtviewer_dst }}
+  shell: cp -rf {{ reports_tmp }}/* {{ reports_dst }}
+  
+- name: Set permissions
+  file:
+    recurse: yes
+    path: "{{ reports_dst }}/"
+    owner: tomcat7
+    group: tomcat7
+
+- name: Select connection profiles
+  sudo: yes
+  command: "mv {{ reports_dst }}/{{ item.src }} {{ reports_dst }}/{{ item.dst }}"
+  with_items:
+    - "{{ birt_reports.connection_profile }}"
