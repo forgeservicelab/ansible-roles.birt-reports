@@ -1,4 +1,6 @@
 # The desired files and directories the role will install and use
 reports_dir: forge_birt_reports
 reports_tmp: /tmp/{{ reports_dir }}
-birtviewer_dst: /var/lib/tomcat7/webapps/birt-viewer
+reports_dst: /var/lib/tomcat7/webapps/birt-viewer
+reports_deps:
+  - 'git-core'
