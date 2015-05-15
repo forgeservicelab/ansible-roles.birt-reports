@@ -1,35 +1,36 @@
 ---
 
-- name: "Install dependencies"
+- name: Install dependencies
   action: "{{ ansible_pkg_mgr }} name={{ item }} state=installed update-cache=yes"
   with_items: 
       - "{{ reports_deps }}"
 
-- name: "Setup birt user"
+- name: Setup birt user
   user: name="{{ birt_reports.user.name }}"
 
 - name: Setup authorized keys
   authorized_key: 
-    user: "{{ birt_reports.user }}"
+    user: "{{ birt_reports.user.name }}"
     key: "{{ lookup('file', './files/%s' % item) }}"
-  with_items: birt_reports.user.auth_keys
+  with_items:
+    - "{{ birt_reports.user.auth_keys }}"
    
 # Install git_access_key if it exists
 # It might be better to copy this manually and comment out this task
-- name: "Setup git_access_key"
+- name: Setup git_access_key
   copy:
     src: "./files/{{ birt_reports.repo_access_key }}"
-    dest: "/home/{{ birt_reports.user}}/.ssh/{{ birt_reports.repo_access_key }}"
+    dest: "/home/{{ birt_reports.user.name}}/.ssh/{{ birt_reports.repo_access_key }}"
     mode: 0600
-    owner: "{{ birt_reports.user }}"
-    group: "{{ birt_reports.user }}"
+    owner: "{{ birt_reports.user.name }}"
+    group: "{{ birt_reports.user.name }}"
 
 - name: Fetch report files
   git:
     dest: "{{ reports_tmp }}"
     repo: "{{ birt_reports.repo }}"
     ssh_opts: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
-    key_file: "/home/{{ birt_reports.user }}/.ssh/{{ birt_reports.repo_access_key }}"
+    key_file: "/home/{{ birt_reports.user.name }}/.ssh/{{ birt_reports.repo_access_key }}"
     force: yes
 
 - name: Install report files
