@@ -10,3 +10,4 @@ birt_reports:
       - 'auth_jenkins.pub'
   repo_access_key: git_access_key
   repo: ssh://gitlab@git.forgeservicelab.fi:10022/forge/forge-birt-reportdesigns.git
+
