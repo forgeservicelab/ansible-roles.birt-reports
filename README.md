@@ -11,8 +11,8 @@ Requirements
 You must have following files in the master playbook files/ folder.
 
 	- git_access_key  - the deployment key for accessing git repo
-	- birt.pub - the public key you want to have for birt user as auth key
-	- jenkins.pub - the public key you want to add for jenkins access
+	- auth_key.pub - the authorized key for the birt user access
+	- auth_jenkins.pub - another authorized key for e.g. jenkins access
 	
 	
 

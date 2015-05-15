@@ -3,9 +3,10 @@
 # You might want to override these in your master playbook
 # and place the actual git_access_key in the root dir of the master playbook
 birt_reports:
-  user: birt
+  user:
+    name: birt
+    auth_keys:
+      - 'auth_key.pub'
+      - 'auth_jenkins.pub'
   repo_access_key: git_access_key
   repo: ssh://gitlab@git.forgeservicelab.fi:10022/forge/forge-birt-reportdesigns.git
-  auth_keys:
-    - 'birt.pub'
-    - 'jenkins.pub'
